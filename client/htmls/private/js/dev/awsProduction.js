@@ -1490,6 +1490,7 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
                                         alert("Please select repository.");
                                         return false;
                                     }
+
                                     if (!containerPort) {
                                         alert("Please specify container port.");
                                         return false;
@@ -1549,18 +1550,17 @@ var $wizard = $('#bootstrap-wizard-1').bootstrapWizard({
 
                             //Attributes start
 
-                            var attrs = [];
-                            var table = $("#attributesViewListTable tbody");
-                            table.find('tr').each(function(i) {
-                                var obj = {};
-                                var $tds = $(this).find('td'),
-                                    attribute = $tds.eq(0).text(),
-                                    value = $tds.eq(1).text();
-                                alert(attribute);
-                                alert(value);
-                                obj[attribute] = value;
-                                attrs.push(obj);
+                            $trAttribute = $('#attributesViewListTable').find('tbody tr');
+                            var attributes = [];
+                            $trAttribute.each(function() {
+                                var $tr = $(this);
+                                attributes.push({
+                                    name: $tr.attr('data-attributeName'),
+                                    jsonObj: $tr.data('jsonObj')
+                                });
                             });
+                            reqBody.attributes = attributes;
+
                             // Attributes end
 
 
