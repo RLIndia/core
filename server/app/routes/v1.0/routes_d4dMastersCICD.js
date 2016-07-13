@@ -172,10 +172,11 @@ module.exports.setRoutes = function(app) {
                                 res.status(500).send('Not able to fetch Jenkins.');
                             }
                             //res.send(jenkinList);
-			    var hygProp = '';
+			                var hygProp = '';
                             if(jenkinList[0]){
-                            hygProp += 'jenkins.username=' + jenkinList[0].jenkinsurl + '\n';
-                            hygProp += 'jenkins.apiKey=' + jenkinList[0].jenkinspassword + '\n';
+                                hygProp += 'jenkins.servers[0]=' + jenkinList[0].jenkinsurl + '\n';
+                                hygProp += 'jenkins.username=' + jenkinList[0].jenkinsusername + '\n';
+                                hygProp += 'jenkins.apiKey=' + jenkinList[0].jenkinspassword + '\n';
                             }
                             res.send(hygProp);
                             return;

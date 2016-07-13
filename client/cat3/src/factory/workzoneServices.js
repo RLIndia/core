@@ -147,6 +147,12 @@
 					var url = '/instances/' + instanceId + '/updateName';
 					return $http.post(fullUrl(url), instanceName, Auth.getHeaderObject());
 				},
+				postBulkImport: function (urlParams, reqBody){
+					var url = '/organizations/' + urlParams.org + '/businessgroups/' +
+							urlParams.bg + '/projects/' + urlParams.proj + '/environments/' +
+							urlParams.env + '/bulkImport';
+					return $http.post(fullUrl(url), reqBody, Auth.getHeaderObject());
+				},
 				postImportByIP: function (urlParams, reqBody) {
 					var url = '/organizations/' + urlParams.org + '/businessgroups/' +
 							urlParams.bg + '/projects/' + urlParams.proj + '/environments/' +

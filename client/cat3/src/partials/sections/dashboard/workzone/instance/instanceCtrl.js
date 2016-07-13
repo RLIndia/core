@@ -454,7 +454,8 @@
 				modalInstance.result.then(function(newinstId) {
 					$scope.isImportClickEnabled = true;
 					$rootScope.$emit('WZ_INSTANCES_SHOW_LATEST');
-					$scope.operationSet.viewLogs(newinstId);
+					
+						$scope.operationSet.viewLogs(newinstId);
 				}, function() {
 					$scope.isImportClickEnabled = true;
 					console.log('Modal dismissed at: ' + new Date());

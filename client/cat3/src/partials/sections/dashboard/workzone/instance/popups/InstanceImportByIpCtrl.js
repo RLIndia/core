@@ -24,6 +24,7 @@
 				isPemActive: 'password',
 				os: '',
 				pemfile: '',
+				csvbulkimportfile: '',
 				username: '',
 				passwordModel: '',
 				ipAddress: '',
@@ -35,6 +36,21 @@
 						var fileContent = new FileReader();
 						fileContent.onload = function(e) {
 							$scope.addPemText(e.target.result);
+						};
+						fileContent.onerror = function(e) {
+							alert(e);
+						};
+						fileContent.readAsText($event);
+					} else {
+						alert('HTMl5 File Reader is not Supported. Please upgrade your browser');
+					}
+				},
+				csvbulkfileSelection : function($event){
+					console.log($event);
+					if (FileReader) {
+						var fileContent = new FileReader();
+						fileContent.onload = function(e) {
+							$scope.addCsvBulkText(e.target.result);
 						};
 						fileContent.onerror = function(e) {
 							alert(e);
@@ -85,6 +101,28 @@
 					$scope.addPemText = function(pemfileText){
 						reqBody.credentials.pemFileData = pemfileText;
 						$scope.postMethodImportByIp();
+					};
+				},
+				okBulkImport: function() {
+					reqBody.configManagmentId = $scope.selectedConfig;
+					$scope.isSubmitLoading = true;
+					//post method for import by ip
+					$scope.postMethodCsvBulkImport = function(){
+						 workzoneServices.postBulkImport(workzoneEnvironment.getEnvParams(),reqBody)
+						 .then(function(response) {
+						 	if(response.data){
+						 		$modalInstance.close(response.data);
+						 	}
+						 },function(response){
+						 	$scope.isSubmitLoading = false;
+						 	$scope.importErrorMessage = response.data.message;
+						 });
+					};
+					$scope.csvbulkfileSelection($scope.csvbulkimportfile);
+					
+					$scope.addCsvBulkText = function(csvbulkfileText){
+						reqBody.csvData = csvbulkfileText;
+						$scope.postMethodCsvBulkImport();
 					};
 				},
 				cancel: function() {
