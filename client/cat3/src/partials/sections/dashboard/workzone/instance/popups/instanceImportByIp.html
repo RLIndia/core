@@ -141,6 +141,23 @@
 			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 importErrorMsg text-right error-padding" ng-show="!isSubmitLoading">
 				{{ importErrorMessage }}
 			</div>
+			<div class="col-lg-8 col-md-8 text-left margintop22px">
+				<label for="autenticationFile">Import from file
+					<!-- <span class="control-label red">&nbsp;*</span> -->
+					<span ng-show="InstanceImportbyIPForm.autenticationFile.$touched && InstanceImportbyIPForm.autenticationFile.$error.required" class="inputValidationMsg">required
+					</span>
+				</label>
+				<div class="col-lg-9 col-md-9 no-padding">
+					<div class="input-groups">
+						<input type="file" name="autenticationFile" class="form-control form-controls" ngf-select="" ng-model="$parent.file" name="file" accept=".csv" required="">
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-3">
+					<button type="submit" class="btn cat-btn-update" id="addInstanceBtn" ng-click="ok();" ng-disabled="!InstanceImportbyIPForm.$valid || isSubmitLoading">
+						<i class="fa fa-download white"></i>&nbsp;Start
+					</button>
+				</div>
+			</div>
 			<div class="marginForButtons">
 				<button type="button" class="btn cat-btn-cancel" ng-click="cancel();">
 					<i class="fa fa-times black"></i>&nbsp;Cancel
