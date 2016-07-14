@@ -454,7 +454,13 @@
 				modalInstance.result.then(function(newinstId) {
 					$scope.isImportClickEnabled = true;
 					$rootScope.$emit('WZ_INSTANCES_SHOW_LATEST');
-					
+					// console.log("********************* Closing *******************");
+					console.log(newinstId);
+					if(newinstId.message)
+						{
+							alert('Import of instances started. Check back the instances pane.');
+						}
+					else
 						$scope.operationSet.viewLogs(newinstId);
 				}, function() {
 					$scope.isImportClickEnabled = true;

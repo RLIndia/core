@@ -106,13 +106,17 @@
 				okBulkImport: function() {
 					reqBody.configManagmentId = $scope.selectedConfig;
 					$scope.isSubmitLoading = true;
+					$scope.isBulkimport = true;
 					//post method for import by ip
 					$scope.postMethodCsvBulkImport = function(){
+
 						 workzoneServices.postBulkImport(workzoneEnvironment.getEnvParams(),reqBody)
 						 .then(function(response) {
 						 	if(response.data){
+						 		console.log(response.data);
 						 		$modalInstance.close(response.data);
 						 	}
+						 	//console.log('*********************** Hit Here *********************');
 						 },function(response){
 						 	$scope.isSubmitLoading = false;
 						 	$scope.importErrorMessage = response.data.message;
