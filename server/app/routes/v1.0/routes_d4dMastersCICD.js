@@ -188,8 +188,14 @@ module.exports.setRoutes = function(app) {
                             if (err) {
                                 res.status(500).send('Not able to fetch Bitbucket.');
                             }
-			    //res.send("test\ntest");
-                            res.send(bitbucketList);
+		                  //res.send("test\ntest");
+                          var hygProp = '';
+                            if(bitbucketList[0]){
+                              hygProp += 'git.username=' + bitbucketList[0].bitbucketusername + '\n';
+                              hygProp += 'git.password=' + bitbucketList[0].bitbucketpassword + '\n';
+                            }
+                            res.send(hygProp);
+                            //res.send(bitbucketList);
                             return;
                         });
 
@@ -199,7 +205,7 @@ module.exports.setRoutes = function(app) {
                             if (err) {
                                 res.status(500).send('Not able to fetch Octopus.');
                             }
-			    var hygProp = '';
+			             var hygProp = '';
                             if(octopusList[0]){
                               hygProp += 'octopus.url=' + octopusList[0].octopusurl + '\n';
                               hygProp += 'octopus.apiKey=' + octopusList[0].octopuskey + '\n';
