@@ -117,6 +117,10 @@ function Configmgmt() {
                 logger.log('Exting getDBModelFromID ' + id.toString());
                 callback(null, 'd4dModelOctopusConfig');
                 break;
+            case "29":
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                callback(null, 'd4dModelFunctionalTestConfig');
+                break;
             
         }
     };
@@ -199,6 +203,10 @@ function Configmgmt() {
             case "28":
                 logger.log('Exting getDBModelFromID ' + id.toString());
                 return ('octopusserver');
+                break;
+            case "29":
+                logger.log('Exting getDBModelFromID ' + id.toString());
+                return ('fuctionaltestserver');
                 break;
 
                 

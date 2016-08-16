@@ -993,6 +993,54 @@ var d4dMastersBitbucketConfig = new mongoose.Schema({
 });
 var d4dModelBitbucketConfig = mongoose.model('d4dModelBitbucketConfig', d4dMastersBitbucketConfig, 'd4dmastersnew');
 
+var d4dMastersFunctionalTestConfig = new mongoose.Schema({
+    id: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    functionaltestname: {
+        type: String,
+        required: true,
+        trim: true,
+        validate: nameValidator
+    },
+    functionaltesturl: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    functionaltestdays: {
+        type: String,
+        required: true,
+        trim: true,
+        validate: nameValidator
+    },
+    orgname: {
+        type: [String],
+        required: true,
+        trim: true,
+        validate: nameValidator
+    },
+    orgname_rowid: {
+        type: [String],
+        trim: true
+    },
+    active: {
+        type: Boolean,
+        trim: true,
+        default: true
+    },
+    rowid: {
+        type: String,
+        required: true,
+        trim: true
+    }
+}, {
+    collection: 'd4dmastersnew'
+});
+var d4dModelFunctionalTestConfig = mongoose.model('d4dModelFunctionalTestConfig', d4dMastersFunctionalTestConfig, 'd4dmastersnew');
+
 
 var d4dMastersOctopusConfig = new mongoose.Schema({
     id: {
@@ -1281,6 +1329,9 @@ var d4dMastersJira = new mongoose.Schema({
 });
 var d4dModelMastersJira = mongoose.model('d4dModelMastersJira', d4dMastersJira, 'd4dmastersnew');
 
+
+
+
 var d4dMastersPuppetServer = new mongoose.Schema({
     id: {
         type: String,
@@ -1447,3 +1498,5 @@ module.exports.d4dModelMastersPuppetServer = d4dModelMastersPuppetServer;
 module.exports.d4dModelMastersNexusServer = d4dModelMastersNexusServer;
 module.exports.d4dModelBitbucketConfig = d4dModelBitbucketConfig;
 module.exports.d4dModelOctopusConfig = d4dModelOctopusConfig;
+module.exports.d4dModelFunctionalTestConfig = d4dModelFunctionalTestConfig;
+

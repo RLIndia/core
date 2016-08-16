@@ -580,6 +580,40 @@ var MasterUtil = function() {
         });
     }
 
+    this.getFunctionalTest = function(orgList, callback) {
+        var functionaltestList = [];
+        var rowIds = [];
+        for (var x = 0; x < orgList.length; x++) {
+            rowIds.push(orgList[x].rowid);
+        }
+        logger.debug("org rowids: ", rowIds);
+        d4dModelNew.d4dModelFunctionalTestConfig.find({
+            orgname_rowid: {
+                $in: rowIds
+            }
+        }, function(err, functionaltest) {
+            if (functionaltest) {
+                configmgmtDao.getRowids(function(err, rowidlist) {
+                    for (var i = 0; i < functionaltest.length; i++) {
+                        if (functionaltest[i].id === '29') {
+                            names = configmgmtDao.convertRowIDToValue(functionaltest[i].orgname_rowid, rowidlist)
+                            functionaltest[i].orgname = names;
+                            functionaltestList.push(functionaltest[i]);
+                        }
+                    }
+                    callback(null, functionaltestList);
+                    return;
+                });
+            } else {
+                callback(err, null);
+                return;
+            }
+
+        });
+    }
+    
+
+
     this.getJira = function(orgList, callback) {
         var jiraList = [];
         var rowIds = [];
@@ -614,6 +648,8 @@ var MasterUtil = function() {
 
         });
     }
+
+
 
 
     // Return All Orgs specific to User

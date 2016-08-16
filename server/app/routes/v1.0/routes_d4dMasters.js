@@ -762,8 +762,17 @@ module.exports.setRoutes = function(app, sessionVerification) {
                             return;
                         });
 
-                    } 
-                    else if (req.params.id === '23') {
+                    } else if (req.params.id === '29') {
+                        // For Octopus
+                        masterUtil.getFunctionalTest(orgList, function(err, functionaltestlist) {
+                            if (err) {
+                                res.status(500).send('Not able to fetch Functional Tests.');
+                            }
+                            res.send(functionaltestlist);
+                            return;
+                        });
+
+                    }else if (req.params.id === '23') {
                         // For Jira
                         logger.debug("Entering getJira");
                         masterUtil.getJira(orgList, function(err, jiraList) {
@@ -948,6 +957,16 @@ module.exports.setRoutes = function(app, sessionVerification) {
                                 res.status(500).send('Not able to fetch Octopus.');
                             }
                             res.send(octopusList);
+                            return;
+                        });
+
+                    }else if (req.params.id === '29') {
+                        // For Octopus
+                        masterUtil.getFunctionalTest(orgList, function(err, functionaltestlist) {
+                            if (err) {
+                                res.status(500).send('Not able to fetch Functional Tests.');
+                            }
+                            res.send(functionaltestlist);
                             return;
                         });
 
