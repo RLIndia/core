@@ -215,7 +215,25 @@ module.exports.setRoutes = function(app) {
                             return;
                         });
 
-                    } 
+                    } else if (req.params.id === '29') {
+                        // For Functional Test
+                        logger.debug('Yippeee....');
+                        masterUtil.getFunctionalTest(orgList, function(err, functionaltestList) {
+                            if (err) {
+                                res.status(500).send('Not able to fetch Functional Test.');
+                            }
+                            logger.debug(functionaltestList);
+                            var functionalProp = '';
+                            if(functionaltestList[0]){
+                              functionalProp += 'sbux.url=' + functionaltestList[0].functionaltesturl + '\n';
+                              functionalProp += 'sbux.days=' + functionaltestList[0].functionaltestdays + '\n';
+                            }
+                            res.send(functionalProp);
+                            //res.send(octopusList);
+                            return;
+                        });
+
+                    }
                     else if (req.params.id === '23') {
                         // For Jira
                         logger.debug("Entering getJira");
@@ -409,7 +427,24 @@ module.exports.setRoutes = function(app) {
                             return;
                         });
 
-                    }else if (req.params.id === '23') {
+                    }else if (req.params.id === '29') {
+                        // For Functional Test
+                        masterUtil.getFunctionalTest(orgList, function(err, functionaltestList) {
+                            if (err) {
+                                res.status(500).send('Not able to fetch Functional Test.');
+                            }
+                            var functionalProp = '';
+                            if(functionaltestList[0]){
+                              functionalProp += 'sbux.url=' + functionaltestList[0].functionaltesturl + '\n';
+                              functionalProp += 'sbux.days=' + functionaltestList[0].functionaltestdays + '\n';
+                            }
+                            res.send(functionalProp);
+                            //res.send(octopusList);
+                            return;
+                        });
+
+                    }
+                    else if (req.params.id === '23') {
                         // For Jira
                         masterUtil.getJira(orgList, function(err, jiraList) {
                             if (err) {
