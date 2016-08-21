@@ -85,6 +85,8 @@
           <div class="hiddencollapse treeStyle">TRACK</div>
         </div>
         <div id="trackTree" class="font-size-12"></div>
+        <div id="trackzoomicon" class="zoomout trackzoomicondiv hidden" onclick="zoomdashboard(this);">
+        </div>
       </div>
       <!--track ends here-->
       <div id="Settings_nav" style="display:none;">
@@ -1202,10 +1204,27 @@ function loadTrackTree() {
             event.stopPropagation();
             event.preventDefault();
             event.stopPropagation();
+            if(node['data-href'].indexOf('#/dashboard/') > 0){
+             // alert('yep' + node['data-href']);
+              $('#trackzoomicon').append('[+]').attr('title','Maximize').toggleClass('hidden',6500);
+
+            }
             return false;
         }
     });
 }
+
+var zoomdashboard = function(icondiv){
+  //find out if zoom-out or in
+  $('body').toggleClass('zoom');
+  if($('body').hasClass('zoom')){ //zoomed
+      $('#trackzoomicon').empty().append('[-]').attr('title','Restore');
+  }
+  else{
+    $('#trackzoomicon').empty().append('[+]').attr('title','Maximize');
+  }
+}
+
 
 var treeData;
 
