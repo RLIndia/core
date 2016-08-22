@@ -1204,11 +1204,14 @@ function loadTrackTree() {
             event.stopPropagation();
             event.preventDefault();
             event.stopPropagation();
-            if(node['data-href'].indexOf('#/dashboard/') > 0){
+            if(node['data-href'].indexOf('/#/site') > 0){
              // alert('yep' + node['data-href']);
-              $('#trackzoomicon').append('[+]').attr('title','Maximize').toggleClass('hidden',6500);
+              $('#trackzoomicon').empty().append('[+]').attr('title','Maximize').toggleClass('hidden',2500);
 
             }
+	    else{
+		     $('#trackzoomicon').empty().addClass('hidden');
+		}		   
             return false;
         }
     });
