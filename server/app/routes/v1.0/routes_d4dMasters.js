@@ -3422,7 +3422,7 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.post('/d4dMasters/passwd',function(req,res){
         var user = req.session.user;
-       
+        authUtil.
         var cpass = cryptography.encryptText(req.body.currentpasswd, cryptoConfig.encryptionEncoding, cryptoConfig.decryptionEncoding);
         var npass = cryptography.encryptText(req.body.newpasswd, cryptoConfig.encryptionEncoding, cryptoConfig.decryptionEncoding);
             masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
