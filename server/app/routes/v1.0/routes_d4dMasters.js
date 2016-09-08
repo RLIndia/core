@@ -3421,42 +3421,54 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.post('/d4dMasters/passwd',function(req,res){
-        var user = req.session.user;
-        var bodyJson = JSON.parse(JSON.stringify(req.body));
-        authUtil.hashPassword(bodyJson["currentpasswd"], function(err, hashedPassword) {
-            logger.debug(hashPassword);
+        var loggedInUser = req.session.user.cn;
+        if(req.body.newpasswd == ''){
+            res.status(500).send('Password cannot be blank');
+            return;
+        }
+        if(req.body.newpasswd == req.body.currentpasswd){
+            res.status(200).send('Password unchanged.');
+            return;
+        }
+        masterUtil.getLoggedInUser(loggedInUser, function(err, anUser) {
+            if(!anUser || err){
+                res.status(500).send('Failed to fetch user.');
+                return;
+            }
+
+            authUtil.checkPassword(req.body.currentpasswd,anUser.password,function(err,isMatched){
+                if(isMatched && !err){
+                    logger.debug('Password matched..about to update to ' + req.body.newpasswd);
+                    authUtil.hashPassword(req.body.newpasswd,function(err,hashedPassword){
+                        anUser.password = hashedPassword;
+                        logger.debug('hashedPassword : ' + req.body.newpasswd);
+                        d4dModelNew.d4dModelMastersUsers.update({
+                            rowid: anUser.rowid,
+                            "id": "7"
+                        }, {
+                            $set: anUser
+                        }, {
+                            upsert: false
+                        }, function(err, saveddata) {
+                            if (err) {
+                                logger.error('Hit Save error', err);
+                                res.status(500).send("Save error " + err);
+                                return;
+                            }
+                            logger.debug('Password updated to :' + anUser.password);
+                            res.status(200).send("Password updated.");
+                            return;
+                        });
+                    });
+                }else{
+                    logger.debug("Not Mached..");
+                    res.status(500).send("Old password not matched.");
+                    return;
+                }
+            });
         });
-
-        logger.debug(JSON.stringify(user.password));
-        if(req.body.currentpasswd == user.password){
-            res.send(200);
-
-        }
-        else{
-            res.send(500);
-        }
         
-        // authUtil.hashPassword(req.body.currentpasswd, function(err, currentpasswd) {
-        //     // var cpass = 
-        //     // var npass = hashedPassword;
-        //     // masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
-        //     //     logger.debug(anUser.password);
-        //     //     logger.debug(cpass);
-                
-        //     //     res.status(200);
-        //     // });
-        //     logger.debug(req.body.newpasswd);
-        //     authUtil.hashPassword(req.body.newpasswd, function(err, newpasswd) {
-        //         logger.debug(currentpasswd);
-        //         logger.debug(newpasswd);
-        //         masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
-        //             if(anUser)
-        //                 logger.debug(anUser.password);
-        //             res.status(200);
-        //         });
-
-        //     });
-        // });
+        
         
     });
 
