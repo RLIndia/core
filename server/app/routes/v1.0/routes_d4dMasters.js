@@ -3422,15 +3422,42 @@ module.exports.setRoutes = function(app, sessionVerification) {
 
     app.post('/d4dMasters/passwd',function(req,res){
         var user = req.session.user;
-        authUtil.
-        var cpass = cryptography.encryptText(req.body.currentpasswd, cryptoConfig.encryptionEncoding, cryptoConfig.decryptionEncoding);
-        var npass = cryptography.encryptText(req.body.newpasswd, cryptoConfig.encryptionEncoding, cryptoConfig.decryptionEncoding);
-            masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
-                logger.debug(anUser.password);
-                logger.debug(cpass);
+        var bodyJson = JSON.parse(JSON.stringify(req.body));
+        authUtil.hashPassword(bodyJson["currentpasswd"], function(err, hashedPassword) {
+            logger.debug(hashPassword);
+        });
+
+        logger.debug(JSON.stringify(user.password));
+        if(req.body.currentpasswd == user.password){
+            res.send(200);
+
+        }
+        else{
+            res.send(500);
+        }
+        
+        // authUtil.hashPassword(req.body.currentpasswd, function(err, currentpasswd) {
+        //     // var cpass = 
+        //     // var npass = hashedPassword;
+        //     // masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+        //     //     logger.debug(anUser.password);
+        //     //     logger.debug(cpass);
                 
-                res.status(200);
-            });
+        //     //     res.status(200);
+        //     // });
+        //     logger.debug(req.body.newpasswd);
+        //     authUtil.hashPassword(req.body.newpasswd, function(err, newpasswd) {
+        //         logger.debug(currentpasswd);
+        //         logger.debug(newpasswd);
+        //         masterUtil.getLoggedInUser(user.cn, function(err, anUser) {
+        //             if(anUser)
+        //                 logger.debug(anUser.password);
+        //             res.status(200);
+        //         });
+
+        //     });
+        // });
+        
     });
 
     app.get('/d4dMasters/cftTemplate', function(req, res) {
