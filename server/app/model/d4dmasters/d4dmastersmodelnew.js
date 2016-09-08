@@ -1296,7 +1296,7 @@ var d4dMastersJira = new mongoose.Schema({
     },
     jiraname: {
         type: String,
-        required: true,
+       // required: true,
         trim: true
     },
     jirausername: {

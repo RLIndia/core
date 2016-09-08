@@ -2318,6 +2318,8 @@ module.exports.setRoutes = function(app, sessionVerification) {
         }
     });
 
+
+
     app.post('/d4dMasters/savemasterjsonrownew/:id/:fileinputs/:orgname', function(req, res) {
         logger.debug("Enter post() for /d4dMasters/savemasterjsonrownew/%s/%s/%s", req.params.id, req.params.fileinputs, req.params.orgname);
         var bodyJson = JSON.parse(JSON.stringify(req.body));
@@ -3416,6 +3418,10 @@ module.exports.setRoutes = function(app, sessionVerification) {
             res.send(users);
             return;
         });
+    });
+
+    app.post('/d4dMasters/passwd',function(req,res){
+            
     });
 
     app.get('/d4dMasters/cftTemplate', function(req, res) {
