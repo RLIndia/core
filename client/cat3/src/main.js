@@ -114,10 +114,33 @@ angularApp.controller('HeadNavigatorCtrl', ['$scope', '$rootScope', '$http', '$l
 		$scope.doLogout();
 	});
 }])
-.controller('dashboardCtrl', ['$rootScope', '$scope', '$http', 'uac', '$location', '$state', function ($rootScope, $scope, $http, uac, $location, $state) {
+.controller('dashboardCtrl', ['$rootScope', '$scope', '$http', 'uac', '$location', 'auth', '$modal' , '$state', function ($rootScope, $scope, $http, uac, $location, auth , $modal, $state) {
 	'use strict';
 	$rootScope.isBreadCrumbAvailable = true;
 	$rootScope.app.isDashboard = true;
+	$rootScope.manageUser = function (){
+		$modal.open({
+			templateUrl: 'src/partials/sections/dashboard/workzone/password.html',
+			controller:'updatePasswordCtrl',
+			backdrop: 'static',
+			keyboard: false
+		}).result.then(function () {
+			/*auth.logout().then(function () {
+				$rootScope.app.isDashboard = false;
+				$rootScope.$emit('HIDE_BREADCRUMB');
+				$state.go('signin');
+			});
+			$scope.showLogoutConfirmationSection = false;*/
+		}, function () {
+			console.log('Dismiss time is ' + new Date());
+		});
+		/*auth.logout().then(function () {
+			$rootScope.app.isDashboard = false;
+			$rootScope.$emit('HIDE_BREADCRUMB');
+			$state.go('signin');
+		});
+		$scope.showLogoutConfirmationSection = false;*/
+	}
 	/*State will be dashboard if coming via login flow. So check permission and do default landing logic*/
 	/*Otherwise dont enable default landing logic. This is so that user can land on url directly*/
 	if ($state.current.name === 'dashboard') {
@@ -130,5 +153,30 @@ angularApp.controller('HeadNavigatorCtrl', ['$scope', '$rootScope', '$http', '$l
 		} else if ($rootScope.settingsBool) {
 			$state.go('dashboard.settings');
 		}
+	}
+}]).controller('updatePasswordCtrl', ['$rootScope', '$scope', '$http', 'auth', '$modalInstance', '$state', 'toastr' , function ($rootScope, $scope, $http, auth, $modalInstance, $state, toastr) {
+	'use strict';
+	$rootScope.isBreadCrumbAvailable = true;
+	$rootScope.app.isDashboard = true;
+	$scope.cancel = function () {
+		$modalInstance.dismiss('cancel');
+	}
+	$scope.ok =function () {
+		var url = '/d4dMasters/passwd';
+		var reqBody = {
+			"currentpasswd":$scope.passObject.oldPass,
+			"newpasswd":$scope.passObject.newPass
+		}
+		$scope.IsPasswordMatching = false;
+		if($scope.passObject.newPass != $scope.passObject.confirmPass){
+			$scope.IsPasswordMatching = true;	
+			return false;
+		}
+		$http.post(url, reqBody).success(function(data){
+			toastr.success('Password Updated Successfully');
+			$modalInstance.close();
+		}).error(function (error){
+        	toastr.error(error);
+  		});
 	}
 }]);
