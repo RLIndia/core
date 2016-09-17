@@ -201,7 +201,7 @@
             <div class="modal-body">
               <fieldset>
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                  <label for="oldPass">Old Password
+                  <label class="labelFontWeight" for="oldPass">Old Password
                     <span class="control-label redSpan">&nbsp;*</span>
                   </label>
                   <div class="input-groups">
@@ -209,7 +209,7 @@
                   </div>
                 </div>
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 margintop15">
-                  <label for="newPass">New Password
+                  <label class="labelFontWeight" for="newPass">New Password
                     <span class="control-label redSpan">&nbsp;*</span>
                   </label>
                   <div class="input-groups">
@@ -217,7 +217,7 @@
                   </div>
                 </div>
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 margintop15">
-                  <label for="confirmPass">Confirm Password
+                  <label class="labelFontWeight" for="confirmPass">Confirm Password
                     <span class="control-label redSpan">&nbsp;*</span>
                   </label>
                   <div class="input-groups">
@@ -227,8 +227,8 @@
               </fieldset>
             </div>
             <div class="modal-footer">
-              <a type="button" class="btn btn-default" data-dismiss="modal">Close</a>
-              <input type="submit" id="passwordSave" class="btn btn-primary" value="Save" />
+              <a type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times black"></i>&nbsp;Cancel</a>
+              <button type="submit" id="passwordSave" class="btn btn-primary"><i class="fa fa-check white" disabled="disabled"></i>&nbsp;Save</button>
             </div>
           </form>
         </div>
@@ -764,6 +764,13 @@ String.prototype.capitalizeFirstLetter = function() {
 
 $(document).on('shown.bs.modal', function(e) {
     $('[autofocus]', e.target).focus();
+    $('#updatePasswordForm').find('input:password').keyup(function() {
+        if($('#oldPassword').val() != "" && $('#newPassword').val() != "" && $('#confirmPassword').val() != "") {
+           $('#passwordSave').removeAttr('disabled');
+        } else {
+           $('#passwordSave').attr('disabled', true);   
+        }
+    });
 });
 
 //form validation for password update
@@ -805,6 +812,8 @@ $('#liuserinfo').click(function(e){
     $('#updatePasswordModal').modal('show');
 });
 
+
+
 $('#updatePasswordForm').submit(function(e) {
     var isValidator = $('#updatePasswordForm').valid();
     if (!isValidator) {
@@ -818,9 +827,6 @@ $('#updatePasswordForm').submit(function(e) {
       var reqBody = {
           "currentpasswd": oldPass,
           "newpasswd": newPass
-      }
-      if(newPass != confirmPass) {
-
       }
       var url = '/d4dMasters/passwd';
       $.ajax({

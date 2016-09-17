@@ -4557,3 +4557,6 @@ form.cmxform .gray * {
 .userPointer {
     cursor: pointer;
 }
+.labelFontWeight {
+    font-weight: 700!important;
+}
