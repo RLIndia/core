@@ -764,13 +764,6 @@ String.prototype.capitalizeFirstLetter = function() {
 
 $(document).on('shown.bs.modal', function(e) {
     $('[autofocus]', e.target).focus();
-    $('#updatePasswordForm').find('input:password').keyup(function() {
-        if($('#oldPassword').val() != "" && $('#newPassword').val() != "" && $('#confirmPassword').val() != "") {
-           $('#passwordSave').removeAttr('disabled');
-        } else {
-           $('#passwordSave').attr('disabled', true);   
-        }
-    });
 });
 
 //form validation for password update
@@ -810,6 +803,13 @@ $('#updatePasswordModal').on('hidden.bs.modal', function () {
 
 $('#liuserinfo').click(function(e){
     $('#updatePasswordModal').modal('show');
+    $('#updatePasswordForm').find('input:password').keyup(function() {
+        if($('#oldPassword').val() != "" && $('#newPassword').val() != "" && $('#confirmPassword').val() != "") {
+           $('#passwordSave').removeAttr('disabled');
+        } else {
+           $('#passwordSave').attr('disabled', true);   
+        }
+    });
 });
 
 
