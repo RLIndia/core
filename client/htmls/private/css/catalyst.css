@@ -4554,3 +4554,6 @@ form.cmxform .gray * {
     top: 63px;
     cursor: pointer;
 }
+.userPointer {
+    cursor: pointer;
+}
