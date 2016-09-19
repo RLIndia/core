@@ -36,7 +36,7 @@
 				</li>
 				<li class="header-right">
 					<div id="header-menu">
-						<div id="userInfo" class="headNavigItem" title="{{appDetails.roleId}}">
+						<div id="userInfo" ng-click="manageUser();" class="headNavigItem" title="{{appDetails.roleId}}">
 							<i class="fa fa-user white"></i> 
 							{{appDetails.cn | uppercase}}
 							[{{appDetails.roleId}}]
