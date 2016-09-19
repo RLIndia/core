@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" media="screen" href="css/jqueryUI.min.css">
     <link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="js/jquery-filetree/jqueryFileTree.css" />
+    <link rel="stylesheet" type="text/css"  href="css/toastr.min.css">
   </head>
   <body class="custom-theme">
     <!-- HEADER -->
@@ -49,7 +50,7 @@
             <!--track ends here-->
             <!--right side navbar-->
             <span class="navRight">
-              <li class="left-projects-links active" id="liuserinfo"></li>
+              <li class="left-projects-links" id="liuserinfo"></li>
               <!--Settings tab-->
               <li class="left-projects-links hidden" data-target="#Settings"   navigation="Settings">
                 <a class="dropdown-toggle navigationTab" href="#ajax/Settings/Dashboard.html" id="settingsNew"  onclick="setleftnavigation(this,'Settings');"><i class="fa fa-cog"></i>&nbsp;SETTINGS</a>
@@ -185,6 +186,56 @@
         </li>
       </ul>
     </div>
+
+    <!--modal for password edit-->
+    <div class="modal fade" id="updatePasswordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form role="form" class="cmxform" id="updatePasswordForm">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">
+                  Password Update
+              </h4>
+            </div>
+            <div class="modal-body">
+              <fieldset>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                  <label class="labelFontWeight" for="oldPass">Old Password
+                    <span class="control-label redSpan">&nbsp;*</span>
+                  </label>
+                  <div class="input-groups">
+                    <input name="oldPassword" id="oldPassword" autofocus placeholder="Old Password" type="password" class="form-control" required/>
+                  </div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 margintop15">
+                  <label class="labelFontWeight" for="newPass">New Password
+                    <span class="control-label redSpan">&nbsp;*</span>
+                  </label>
+                  <div class="input-groups">
+                    <input name="newPassword" id="newPassword" placeholder="New Password" type="password" class="form-control" required/>
+                  </div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 margintop15">
+                  <label class="labelFontWeight" for="confirmPass">Confirm Password
+                    <span class="control-label redSpan">&nbsp;*</span>
+                  </label>
+                  <div class="input-groups">
+                    <input name="confirmPassword" id="confirmPassword" placeholder="Confirm Passord" type="password" class="form-control" required/>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+            <div class="modal-footer">
+              <a type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times black"></i>&nbsp;Cancel</a>
+              <button type="submit" id="passwordSave" class="btn btn-primary"><i class="fa fa-check white" disabled="disabled"></i>&nbsp;Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!--modal for password update-->
+
     <!--modal for instance edit-->
     <div class="modal fade" id="modalforInstanceEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog">
@@ -699,14 +750,106 @@
 <script src="js/app.js"></script>
 
 <script src="js/dev/dev.js"></script>
+<script src="js/toastr.min.js"></script>
     
 <!-- MAIN APP JS FILE -->
 <script type="text/javascript">
+//toastr config
+  toastr.options.closeButton = true;
+  toastr.options.closeDuration = 2000;
 var a, b, x;
 String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
+$(document).on('shown.bs.modal', function(e) {
+    $('[autofocus]', e.target).focus();
+});
+
+//form validation for password update
+var validator = $('#updatePasswordForm').validate({
+    rules: {
+      confirmPassword: {
+        equalTo: "#newPassword"
+      }
+    },
+    messages : {
+      confirmPassword: {
+        equalTo: "Both Passwords are not matching."
+      }
+    },
+    onkeyup: false,
+    errorClass: "error",
+    //put error message behind each form element
+    errorPlacement: function(error, element) {
+        console.log(error, element);
+        var elem = $(element);
+        if (element.parent('.input-groups').length) {
+            error.insertBefore(element.parent());
+        } else {
+            if (element.parent('div.inputGroups')) {
+                console.log(element);
+                console.log(element.parent);
+                error.insertBefore('div.inputGroups');
+            }
+        }
+    }
+});
+
+$('#updatePasswordModal').on('hidden.bs.modal', function () {
+    $(this).find('form').trigger('reset');
+    validator.resetForm();
+});
+
+$('#liuserinfo').click(function(e){
+    $('#updatePasswordModal').modal('show');
+    $('#updatePasswordForm').find('input:password').keyup(function() {
+        if($('#oldPassword').val() != "" && $('#newPassword').val() != "" && $('#confirmPassword').val() != "") {
+           $('#passwordSave').removeAttr('disabled');
+        } else {
+           $('#passwordSave').attr('disabled', true);   
+        }
+    });
+});
+
+
+
+$('#updatePasswordForm').submit(function(e) {
+    var isValidator = $('#updatePasswordForm').valid();
+    if (!isValidator) {
+      e.preventDefault();
+      return false;
+    } else {
+      e.preventDefault();
+      var oldPass = $('#oldPassword').val();
+      var newPass = $('#newPassword').val();
+      var confirmPass = $('#confirmPassword').val();
+      var reqBody = {
+          "currentpasswd": oldPass,
+          "newpasswd": newPass
+      }
+      var url = '/d4dMasters/passwd';
+      $.ajax({
+          method: "POST",
+          url: url,
+          data: reqBody,
+          success: function(data, success) {
+              toastr.success('Password Updated Successfully');
+              $('#updatePasswordModal').modal('hide');
+          },
+          error: function(jxhr) {
+              var msg = "Server Behaved Unexpectedly";
+              if (jxhr.responseJSON && jxhr.responseJSON.message) {
+                  msg = jxhr.responseJSON.message;
+              } else if (jxhr.responseText) {
+                  msg = jxhr.responseText;
+              }
+              toastr.error(msg);
+          }
+      });
+      return false;
+    }
+});
 
 $(document).ready(function() {
     var hasSettingsPermission = false;
