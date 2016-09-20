@@ -442,6 +442,8 @@ option.script {
  	@include theme-border-color;
  	height: 30px;
  	padding: 5px 15px;
+    position:relative;
+    z-index:3;
  }
 
  .panel-title {
@@ -579,6 +581,15 @@ option.script {
 	.ui-grid-invisible {
 	    display: none;
 	}
+    .ui-grid-pager-control{
+        .ui-grid-pager-max-pages-number
+        {
+            vertical-align: middle;
+            abbr {
+                border: none;
+            } 
+        }
+    }
 }
 /*ui grid css ends*/
 
