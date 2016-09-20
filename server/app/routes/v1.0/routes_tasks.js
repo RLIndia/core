@@ -23,8 +23,8 @@ var Application = require('_pr/model/classes/application/application');
 var instancesDao = require('_pr/model/classes/instance/instance');
 var TaskHistory = require('_pr/model/classes/tasks/taskHistory');
 var logger = require('_pr/logger')(module);
-var taskService = require('_pr/services/taskService.js')
-
+var taskService = require('_pr/services/taskService.js');
+var masterUtil = require('_pr/lib/utils/masterUtil');
 
 
 var appConfig = require('_pr/config');
@@ -46,12 +46,68 @@ module.exports.setRoutes = function(app, sessionVerification) {
     });
 
     app.get('/tasks/list/all', function(req, res) {
-        Tasks.listTasks(function(err, tasks) {
+        Tasks.listTasks(function(err, tasks1) {
             if (err) {
                 res.status(500).send(errorResponses.db.error);
                 return;
             }
-            res.send(tasks);
+            //Updating the orgname, bgname, projectname and environment names
+            //initializing
+            var tasks  = JSON.parse(JSON.stringify(tasks1));
+            tasks.orgName="";
+            tasks.bgname ="";
+            tasks.projectname = "";
+            tasks.environmentname = "";
+            logger.debug(tasks);
+           // var newTaskList = [];
+            for(var it = 0;it < tasks.length;it++){
+                var getOrgBuProjEnvforTask = function(task,contextit){
+                     logger.debug(task.orgId);
+                     
+                    masterUtil.getOrgByRowId(task.orgId,function(err,orgdata){
+                        if(orgdata){
+                            tasks[contextit].orgName = orgdata.orgname;
+                            logger.debug("in org",tasks[contextit].orgName);
+                           // logger.debug(task);
+                        }
+                        
+                        masterUtil.getBgByRowId(task.bgId,function(err,bgdata){
+                            if(bgdata){
+                                tasks[contextit].bgName = bgdata.productgroupname;
+                            }
+                            
+                            masterUtil.getProjectByRowId(task.projectId,function(err,projectdata){
+                                if(projectdata){
+                                    tasks[contextit].projectName = projectdata.projectname;
+                       
+                                }
+                                
+                                masterUtil.getEnvironmentByEnvId(task.envId,function(err,environmentdata){
+                                    if(environmentdata){
+                                        tasks[contextit].environmentName = environmentdata.environmentname;
+                                                               
+                                    }
+                                    
+                                    if(contextit >= tasks.length - 1){
+                                        //reached the last one return
+                                        res.send(tasks);
+                                    }
+                                });
+                           
+                            });
+                   
+                            
+
+                        });
+                
+                    });
+                };
+                getOrgBuProjEnvforTask(tasks[it],it);
+
+             }   
+
+            
+         
         });
     });
 

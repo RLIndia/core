@@ -936,7 +936,9 @@ var MasterUtil = function() {
         var orgList = [];
         logger.debug("Incomming orgid: ", orgId);
         d4dModelNew.d4dModelMastersOrg.find({
-            _id: new ObjectId(orgId)
+            rowid: {
+                $in: orgId
+            }
         }, function(err, orgs) {
             if (orgs) {
                 for (var i = 0; i < orgs.length; i++) {
@@ -1594,6 +1596,21 @@ var MasterUtil = function() {
 
         });
     };
+
+    this.getBusinessGroupsByBgId = function(bgId,callback){
+        d4dModelNew.d4dModelMastersProductGroup.find({
+            _id:ObjectId(bgId),
+            id:'2'
+        }, function(err, productGroupData) {
+            if(err) {
+                logger.debug("getBusinessGroupsByOrgId: "+err);
+                callback(err, null);
+            }
+            callback(null, productGroupData);
+
+        });
+    }
+
     this.getProjectsBybgId = function(bgId, callback) {
         d4dModelNew.d4dModelMastersProjects.find({
             productgroupname_rowid: bgId,
@@ -1947,6 +1964,49 @@ var MasterUtil = function() {
                 callback(err, null);
             }
             callback(null, envs[0]);
+            return;
+        });
+    }
+
+
+    this.getOrgByRowId = function(orgrowId, callback) {
+        logger.debug("org rowids: ", orgrowId);
+        d4dModelNew.d4dModelMastersOrg.find({
+            rowid: orgrowId,
+            "id": 1
+        }, function(err, orgs) {
+            if (err) {
+                callback(err, null);
+            }
+            callback(null, orgs[0]);
+            return;
+        });
+    }
+
+    this.getBgByRowId = function(bgrowId, callback) {
+        logger.debug("bgrowId rowids: ", bgrowId);
+        d4dModelNew.d4dModelMastersProductGroup.find({
+            rowid: bgrowId,
+            "id": 2
+        }, function(err, bgs) {
+            if (err) {
+                callback(err, null);
+            }
+            callback(null, bgs[0]);
+            return;
+        });
+    }
+
+    this.getProjectByRowId = function(projectrowId, callback) {
+        logger.debug("projectrowId rowids: ", projectrowId);
+        d4dModelNew.d4dModelMastersProjects.find({
+            rowid: projectrowId,
+            "id": 4
+        }, function(err, projects) {
+            if (err) {
+                callback(err, null);
+            }
+            callback(null, projects[0]);
             return;
         });
     }
