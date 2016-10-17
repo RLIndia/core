@@ -1065,6 +1065,12 @@ var d4dMastersOctopusConfig = new mongoose.Schema({
         trim: true
        
     },
+    octopusenvs: {
+        type: String,
+        required: false,
+        trim: true
+       
+    },
     
     orgname: {
         type: [String],

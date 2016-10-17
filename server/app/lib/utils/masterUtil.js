@@ -935,9 +935,7 @@ var MasterUtil = function() {
         var orgList = [];
         logger.debug("Incomming orgid: ", orgId);
         d4dModelNew.d4dModelMastersOrg.find({
-            rowid: {
-                $in: orgId
-            }
+            _id: new ObjectId(orgId)
         }, function(err, orgs) {
             if (orgs) {
                 for (var i = 0; i < orgs.length; i++) {
@@ -1999,21 +1997,6 @@ var MasterUtil = function() {
         });
     }
 
-
-    this.getOrgByRowId = function(orgrowId, callback) {
-        logger.debug("org rowids: ", orgrowId);
-        d4dModelNew.d4dModelMastersOrg.find({
-            rowid: orgrowId,
-            "id": 1
-        }, function(err, orgs) {
-            if (err) {
-                callback(err, null);
-            }
-            callback(null, orgs[0]);
-            return;
-        });
-    }
-
     this.getBgByRowId = function(bgrowId, callback) {
         logger.debug("bgrowId rowids: ", bgrowId);
         d4dModelNew.d4dModelMastersProductGroup.find({
@@ -2041,6 +2024,7 @@ var MasterUtil = function() {
             return;
         });
     }
+
 
     // Return Project Name
     this.getProjectName = function(projectId, callback) {
