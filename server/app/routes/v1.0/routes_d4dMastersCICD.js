@@ -206,9 +206,16 @@ module.exports.setRoutes = function(app) {
                                 res.status(500).send('Not able to fetch Octopus.');
                             }
 			             var hygProp = '';
-                            if(octopusList[0]){
-                              hygProp += 'octopus.url=' + octopusList[0].octopusurl + '\n';
-                              hygProp += 'octopus.apiKey=' + octopusList[0].octopuskey + '\n';
+                            // if(octopusList[0]){
+                            //   hygProp += 'octopus.url=' + octopusList[0].octopusurl + '\n';
+                            //   hygProp += 'octopus.apiKey=' + octopusList[0].octopuskey + '\n';
+                            // }
+                            if(octopusList){
+                                for(var oi = 0; oi < octopusList.length;oi++){
+                                      hygProp += 'octopus.url[' + oi + ']=' + octopusList[oi].octopusurl + '\n';
+                                      hygProp += 'octopus.apiKey[' + oi + ']=' + octopusList[oi].octopuskey + '\n';
+                                      hygProp += 'octopus.environments[' + oi + ']=' + octopusList[oi].octopusenvs + '\n';
+                                }
                             }
                             res.send(hygProp);
                             //res.send(octopusList);
