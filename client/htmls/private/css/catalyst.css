@@ -4598,7 +4598,6 @@ input:focus, select:focus, textarea:focus {
     border: none;
     width: auto !important;
 }
-<<<<<<< HEAD
 .zoom{
     height: 117%;
     margin-left: -254px;
@@ -4618,7 +4617,7 @@ input:focus, select:focus, textarea:focus {
 .labelFontWeight {
     font-weight: 700!important;
 }
-=======
+
 
 #createProvider .marginbottom {
     margin-bottom: 10px;
@@ -4694,4 +4693,4 @@ input:focus, select:focus, textarea:focus {
 .blueprintdiv-aws {
     width:77%!important;
 }
->>>>>>> main/master
+

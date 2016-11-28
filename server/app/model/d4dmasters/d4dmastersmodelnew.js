@@ -960,8 +960,7 @@ var d4dMastersBitbucketConfig = new mongoose.Schema({
     bitbucketusername: {
         type: String,
         required: true,
-        trim: true,
-        validate: nameValidator
+        trim: true
     },
     bitbucketpassword: {
         type: String,
